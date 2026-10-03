@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FireCat Studio｜落墨成勢</title>
+<meta name="description" content="FireCat Studio（火焰貓）獨立遊戲工作室。《落墨成勢》是一款水墨地盤對弈：在宣紙上輪流落筆，讓墨暈開搶地盤。">
+<meta property="og:title" content="落墨成勢 Inkroach｜FireCat Studio">
+<meta property="og:description" content="在宣紙上輪流落筆，讓墨暈開搶地盤。Paint with ink to claim ground.">
+<meta property="og:image" content="https://carterchou.github.io/assets/icon.png">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4ecdc;
+    --ink: #1f1c19;
+    --ink-soft: #4a443d;
+    --ink-faint: #8a8176;
+    --qing: #2f5d8a;      /* 青 */
+    --zhu: #b8322a;       /* 朱 */
+    --line: rgba(31, 28, 25, 0.16);
+    --card: rgba(250, 246, 237, 0.86);
+    --serif: "Noto Serif TC", "Songti TC", "PMingLiU", serif;
+  }
+  html[lang="zh-Hans"] { --serif: "Noto Serif SC", "Songti SC", serif; }
+  html[lang="ja"] { --serif: "Noto Serif JP", "Hiragino Mincho ProN", "Yu Mincho", serif; }
+  html[lang="ko"] { --serif: "Noto Serif KR", "AppleMyungjo", "Batang", serif; }
+  html[lang="en"], html[lang="de"], html[lang="fr"], html[lang="es"] { --serif: "Noto Serif", Georgia, "Times New Roman", serif; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    color: var(--ink);
+    background: var(--paper) url("assets/paper.jpg") repeat;
+    background-size: 600px;
+    font-family: var(--serif);
+    line-height: 1.85;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--qing); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+
+  /* ── 頂欄 ── */
+  nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(244, 236, 220, 0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 56px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 600; letter-spacing: 0.06em; color: var(--ink); text-decoration: none; white-space: nowrap; }
+  .brand img { width: 32px; height: 32px; border-radius: 8px; background: #000; }
+  .nav-right { display: flex; align-items: center; gap: 18px; min-width: 0; }
+  nav ul { list-style: none; display: flex; gap: 20px; margin: 0; padding: 0; font-size: 15px; white-space: nowrap; }
+  nav ul a { color: var(--ink-soft); text-decoration: none; }
+  nav ul a:hover { color: var(--zhu); }
+  .lang {
+    font: inherit; font-size: 14px; color: var(--ink-soft);
+    background: rgba(255,255,255,0.5) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234a443d'/%3E%3C/svg%3E") no-repeat right 10px center;
+    border: 1px solid var(--line); border-radius: 8px; padding: 5px 28px 5px 10px;
+    -webkit-appearance: none; appearance: none; cursor: pointer;
+  }
+  .lang:focus-visible { outline: 2px solid var(--qing); outline-offset: 2px; }
+
+  /* ── 首屏 ── */
+  .hero {
+    position: relative; overflow: hidden;
+    background: linear-gradient(90deg, rgba(244,236,220,0.96) 0%, rgba(244,236,220,0.88) 45%, rgba(244,236,220,0.15) 100%),
+                url("assets/landscape.jpg") right center / cover no-repeat;
+    border-bottom: 1px solid var(--line);
+  }
+  .hero .wrap { display: grid; grid-template-columns: 1.15fr 0.85fr; align-items: end; min-height: 600px; }
+  .hero-text { padding: 72px 0 80px; align-self: center; }
+  .hero-text .title { width: min(420px, 90%); max-height: 150px; object-fit: contain; object-position: left center; display: block; margin: 0 0 8px -8px; }
+  .tagline { font-size: 21px; letter-spacing: 0.12em; color: var(--ink-soft); margin: 0 0 22px; }
+  .lede { font-size: 16.5px; max-width: 32em; margin: 0 0 32px; }
+  .moxi { align-self: end; justify-self: center; width: 100%; max-width: 380px; display: block; margin-bottom: -4px; filter: drop-shadow(0 8px 20px rgba(60, 40, 20, 0.18)); }
+
+  .stores { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 12px 22px; border-radius: 10px; text-decoration: none;
+    font-size: 16px; font-weight: 600; letter-spacing: 0.04em;
+  }
+  .btn-play { background: var(--ink); color: #f8f2e6; }
+  .btn-play:hover { background: #000; }
+  .btn-play svg { width: 22px; height: 22px; flex: none; }
+  .btn-ios { border: 1px dashed var(--ink-faint); color: var(--ink-soft); cursor: default; background: rgba(255,255,255,0.35); }
+  .btn-ios svg { width: 20px; height: 20px; fill: var(--ink-soft); flex: none; }
+  .btn small { display: block; font-size: 12px; font-weight: 400; letter-spacing: 0.08em; opacity: 0.8; line-height: 1.3; }
+  .btn span { line-height: 1.3; }
+
+  /* ── 區段 ── */
+  section { padding: 76px 0; border-bottom: 1px solid var(--line); }
+  h2 {
+    font-size: 30px; font-weight: 900; letter-spacing: 0.12em; margin: 0 0 8px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  h2::before { content: ""; flex: none; width: 10px; height: 30px; background: var(--zhu); border-radius: 2px; }
+  .sub { color: var(--ink-faint); letter-spacing: 0.08em; margin: 0 0 36px; font-size: 15px; }
+  .prose { font-size: 17px; max-width: 40em; }
+  .prose p { margin: 0 0 1em; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 32px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; }
+  .card h3 { margin: 0 0 6px; font-size: 20px; letter-spacing: 0.08em; }
+  .card p { margin: 0; color: var(--ink-soft); font-size: 15px; line-height: 1.75; }
+
+  .features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 16px; }
+
+  .about { display: grid; grid-template-columns: 200px 1fr; gap: 40px; align-items: start; }
+  .about img { width: 200px; height: 200px; border-radius: 24px; box-shadow: 0 6px 18px rgba(60,40,20,0.18); }
+  .studio-name { font-size: 22px; font-weight: 900; letter-spacing: 0.08em; margin: 0 0 .4em !important; }
+  .slogan { font-family: "Caveat", cursive; font-size: clamp(20px, 6vw, 32px); line-height: 1.2; color: var(--ink); margin: 6px 0 18px; white-space: nowrap; }
+  .slogan span:nth-child(2) { color: var(--zhu); }
+
+
+  footer { padding: 40px 0 56px; color: var(--ink-faint); font-size: 14px; text-align: center; letter-spacing: 0.04em; }
+  footer a { color: var(--ink-soft); }
+
+  @media (max-width: 860px) {
+    nav ul { gap: 14px; font-size: 14px; }
+    nav ul li.opt { display: none; }
+    .hero { background: linear-gradient(180deg, rgba(244,236,220,0.95) 0%, rgba(244,236,220,0.85) 100%), url("assets/landscape.jpg") center / cover no-repeat; }
+    .hero .wrap { grid-template-columns: 1fr; min-height: 0; }
+    .hero-text { padding: 48px 0 12px; }
+    .moxi { max-width: 260px; }
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .features { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .wrap { padding: 0 16px; }
+    nav ul { display: none; }
+    .tagline { font-size: 17px; }
+    h2 { font-size: 24px; }
+    section { padding: 56px 0; }
+    .grid { grid-template-columns: 1fr; }
+    .about { grid-template-columns: 1fr; gap: 20px; }
+    .about img { width: 160px; height: 160px; border-radius: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="assets/firecat-mark.png" alt="">FireCat Studio</a>
+    <div class="nav-right">
+      <ul id="t-nav"><li><a href="#game">遊戲</a></li><li class="opt"><a href="#download">下載</a></li><li><a href="#studio">工作室</a></li><li><a href="https://carterchou.github.io/inkgame/?lang=tw">隱私</a></li></ul>
+      <select class="lang" id="lang" aria-label="Language"><option value="tw" selected>繁體中文</option><option value="cn">简体中文</option><option value="en">English</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option></select>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero-text">
+      <h1 id="t-title"><img class="title" src="assets/title-tw.png" alt="落墨成勢"></h1>
+      <p class="tagline" id="t-tagline">一筆落墨，一方成勢。</p>
+      <p class="lede" id="t-lede">《落墨成勢》是一款水墨地盤對弈。兩人各執青與朱，在宣紙上輪流落筆 —— 墨會暈開、會被紙上的水流帶著走、會慢慢乾透，也會在兩色相遇的地方混成濁黑，誰都拿不到。最終由墨色佔地多者勝。</p>
+      <div class="stores" id="download">
+        <a class="btn btn-play" href="https://play.google.com/store/apps/details?id=com.firecatstudio.inkgame" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#34A853" d="M3.6 1.8 13.8 12 3.6 22.2a1.6 1.6 0 0 1-.6-1.3V3.1c0-.5.2-1 .6-1.3z"/><path fill="#FBBC04" d="m17.2 15.4-3.4-3.4 3.4-3.4 3.9 2.2c1.1.6 1.1 1.8 0 2.4z"/><path fill="#EA4335" d="M13.8 12 3.6 22.2c.4.4 1.1.5 1.7.1l11.9-6.9z"/><path fill="#4285F4" d="M13.8 12 17.2 8.6 5.3 1.7c-.6-.4-1.3-.3-1.7.1z"/></svg>
+          <span><small id="t-playSmall">前往</small>Google Play</span>
+        </a>
+        <span class="btn btn-ios">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2.1-.9-3.4-.9-1.8 0-3.4 1-4.3 2.6-1.8 3.2-.5 7.9 1.3 10.5.9 1.3 1.9 2.7 3.2 2.6 1.3-.1 1.8-.8 3.3-.8s2 .8 3.4.8c1.4 0 2.3-1.3 3.1-2.6 1-1.5 1.4-2.9 1.4-3-.1 0-2.7-1-2.6-4.2zM13.9 4.9c.7-.9 1.2-2 1.1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.1.1 2.3-.6 3-1.5z"/></svg>
+          <span><small>App Store</small><span id="t-ios">iOS 版銳意開發中</span></span>
+        </span>
+      </div>
+    </div>
+    <img class="moxi" id="t-moxi" src="assets/moxi.png" alt="看板娘墨汐">
+  </div>
+</header>
+
+<main>
+  <section id="game">
+    <div class="wrap">
+      <h2 id="t-gameHead">遊戲介紹</h2>
+      <p class="sub" id="t-closing">墨未乾，勝負未定。</p>
+      <div class="prose" id="t-prose"><p>揮毫落墨，搶下宣紙上的每一寸天地！</p><p>六種筆法任你調度：濃墨壓陣、潑墨開疆、一道勾牆擋住去路，還能用清水洗去對手的地盤。</p><p>看準水流、搶佔勢眼，在墨乾之前，讓整張紙染上你的顏色！</p></div>
+      <div class="grid" id="t-brushes"><div class="card"><h3>點</h3><p>墨最濃、範圍最小，蓋得過對手還沒乾的墨</p></div><div class="card"><h3>潑</h3><p>一口氣佔下一大片，但一局只有一次</p></div><div class="card"><h3>皴</h3><p>落下就乾，誰也推不動</p></div><div class="card"><h3>勾</h3><p>留下一道牆，擋住墨與水的去路</p></div><div class="card"><h3>染</h3><p>拉得最長，順著水路能暈得很遠</p></div><div class="card"><h3>清水</h3><p>自己不搶地，卻能把對手已經乾掉的墨洗淡、洗回濕的</p></div></div>
+      <div class="features" id="t-features"><div class="card"><h3>每一張紙都不一樣</h3><p>紙紋的走向、事先濕過的區域、上過礬水而不吃墨的地方、在紙上流動的水流，每局都不同。紙上還藏著三處「勢眼」，佔下的一方能多拿一大筆分數。讀懂這張紙，才下得出好棋。</p></div><div class="card"><h3>多種玩法</h3><p>本機雙人 · 聯機對戰 · 電腦對戰 · 觀戰 · 臨帖 · 試筆</p></div><div class="card"><h3>收藏</h3><p>贏棋與臨帖會解鎖大廳背景、頭像與插圖。插圖可以存到相簿，也能分享給朋友。</p></div><div class="card"><h3>支援八種語言</h3><p>繁體中文、简体中文、English、日本語、한국어、Deutsch、Français、Español。</p></div></div>
+    </div>
+  </section>
+
+  <section id="studio">
+    <div class="wrap">
+      <h2 id="t-studioHead">關於工作室</h2>
+      <p class="sub" id="t-studioSub">FireCat Studio｜火焰貓</p>
+      <div class="about">
+        <img src="assets/firecat-logo.jpg" alt="FireCat Studio">
+        <div class="prose">
+          <p class="studio-name">FireCat Studio</p>
+          <p id="t-studio">我們是一間獨立遊戲工作室。<br>
+希望打磨每一寸細節，帶給玩家最好的體驗；<br>
+透過不同的方式，帶你走進不一樣的文化與世界，<br>
+也想在忙碌的日子裡，為你留一處放鬆、歇息的角落。</p>
+          <p class="slogan"><span>Make a fun game.</span> <span>Make a game fun.</span></p>
+          <p><span id="t-contact">有任何建議、錯誤回報或合作邀約，都歡迎來信：</span><a href="mailto:firecat870808@gmail.com">firecat870808@gmail.com</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  © 2026 FireCat Studio　·　<a href="mailto:firecat870808@gmail.com">firecat870808@gmail.com</a>　·　<a id="t-privacyLink" href="https://carterchou.github.io/inkgame/?lang=tw">隱私權政策</a>
+</footer>
+
+<script>
+/*
+ * 多語言：?lang= ＞ 使用者上次選的 ＞ 瀏覽器語言 ＞ English。
+ * 遊戲介紹與隱私摘要取自商店文案與隱私權政策的八語版本；工作室介紹另外翻譯。
+ */
+(function () {
+  var I18N = {"tw": {"htmlLang": "zh-Hant", "label": "繁體中文", "nav": ["遊戲", "下載", "工作室", "隱私"], "playSmall": "前往", "ios": "iOS 版銳意開發中", "gameHead": "遊戲介紹", "studioHead": "關於工作室", "studioSub": "FireCat Studio｜火焰貓", "studio": ["我們是一間獨立遊戲工作室。", "希望打磨每一寸細節，帶給玩家最好的體驗；", "透過不同的方式，帶你走進不一樣的文化與世界，", "也想在忙碌的日子裡，為你留一處放鬆、歇息的角落。"], "contact": "有任何建議、錯誤回報或合作邀約，都歡迎來信：", "privacyHead": "隱私權", "privacySub": "摘要；完整內容以隱私權政策為準", "privacyBtn": "閱讀完整隱私權政策 →", "privacyLink": "隱私權政策", "moxiAlt": "看板娘墨汐", "name": "落墨成勢", "tagline": "一筆落墨，一方成勢。", "lede": "《落墨成勢》是一款水墨地盤對弈。兩人各執青與朱，在宣紙上輪流落筆 —— 墨會暈開、會被紙上的水流帶著走、會慢慢乾透，也會在兩色相遇的地方混成濁黑，誰都拿不到。最終由墨色佔地多者勝。", "closing": "墨未乾，勝負未定。", "prose": ["揮毫落墨，搶下宣紙上的每一寸天地！", "六種筆法任你調度：濃墨壓陣、潑墨開疆、一道勾牆擋住去路，還能用清水洗去對手的地盤。", "看準水流、搶佔勢眼，在墨乾之前，讓整張紙染上你的顏色！"], "brushes": [["點", "墨最濃、範圍最小，蓋得過對手還沒乾的墨"], ["潑", "一口氣佔下一大片，但一局只有一次"], ["皴", "落下就乾，誰也推不動"], ["勾", "留下一道牆，擋住墨與水的去路"], ["染", "拉得最長，順著水路能暈得很遠"], ["清水", "自己不搶地，卻能把對手已經乾掉的墨洗淡、洗回濕的"]], "features": [["每一張紙都不一樣", "紙紋的走向、事先濕過的區域、上過礬水而不吃墨的地方、在紙上流動的水流，每局都不同。紙上還藏著三處「勢眼」，佔下的一方能多拿一大筆分數。讀懂這張紙，才下得出好棋。"], ["多種玩法", "本機雙人 · 聯機對戰 · 電腦對戰 · 觀戰 · 臨帖 · 試筆"], ["收藏", "贏棋與臨帖會解鎖大廳背景、頭像與插圖。插圖可以存到相簿，也能分享給朋友。"], ["支援八種語言", "繁體中文、简体中文、English、日本語、한국어、Deutsch、Français、Español。"]]}, "cn": {"htmlLang": "zh-Hans", "label": "简体中文", "nav": ["游戏", "下载", "工作室", "隐私"], "playSmall": "前往", "ios": "iOS 版正在全力开发中", "gameHead": "游戏介绍", "studioHead": "关于工作室", "studioSub": "FireCat Studio｜火焰猫", "studio": ["我们是一家独立游戏工作室。", "希望打磨每一寸细节，带给玩家最好的体验；", "通过不同的方式，带你走进不一样的文化与世界，", "也想在忙碌的日子里，为你留一处放松、歇息的角落。"], "contact": "有任何建议、错误反馈或合作邀约，欢迎来信：", "privacyHead": "隐私", "privacySub": "摘要；完整内容以隐私政策为准", "privacyBtn": "阅读完整隐私政策 →", "privacyLink": "隐私政策", "moxiAlt": "看板娘墨汐", "name": "落墨成势", "tagline": "一笔落墨，一方成势。", "lede": "《落墨成势》是一款水墨地盘对弈。两人各执青与朱，在宣纸上轮流落笔 —— 墨会晕开、会被纸上的水流带着走、会慢慢干透，也会在两色相遇的地方混成浊黑，谁都拿不到。最终由墨色占地多者胜。", "closing": "墨未干，胜负未定。", "prose": ["挥毫落墨，抢下宣纸上的每一寸天地！", "六种笔法任你调度：浓墨压阵、泼墨开疆、一道勾墙挡住去路，还能用清水洗去对手的地盘。", "看准水流、抢占势眼，在墨干之前，让整张纸染上你的颜色！"], "brushes": [["点", "墨最浓、范围最小，盖得过对手还没干的墨"], ["泼", "一口气占下一大片，但一局只有一次"], ["皴", "落下就干，谁也推不动"], ["勾", "留下一道墙，挡住墨与水的去路"], ["染", "拉得最长，顺着水路能晕得很远"], ["清水", "自己不抢地，却能把对手已经干掉的墨洗淡、洗回湿的"]], "features": [["每一张纸都不一样", "纸纹的走向、事先湿过的区域、上过矾水而不吃墨的地方、在纸上流动的水流，每局都不同。纸上还藏着三处“势眼”，占下的一方能多拿一大笔分数。读懂这张纸，才下得出好棋。"], ["多种玩法", "本机双人 · 联机对战 · 电脑对战 · 观战 · 临帖 · 试笔"], ["收藏", "赢棋与临帖会解锁大厅背景、头像与插图。插图可以保存到相册，也能分享给朋友。"], ["支持八种语言", "简体中文、繁體中文、English、日本語、한국어、Deutsch、Français、Español。"]]}, "en": {"htmlLang": "en", "label": "English", "nav": ["Game", "Download", "Studio", "Privacy"], "playSmall": "Get it on", "ios": "iOS version in the works", "gameHead": "About the Game", "studioHead": "About the Studio", "studioSub": "FireCat Studio", "studio": ["We're an independent game studio.", "We polish every detail to give players the best experience we can.", "In many different ways, we want to take you into other cultures and other worlds —", "and on your busiest days, keep a quiet corner where you can rest and unwind."], "contact": "Suggestions, bug reports or collaboration ideas? Write to us: ", "privacyHead": "Privacy", "privacySub": "Summary — the full Privacy Policy prevails", "privacyBtn": "Read the full Privacy Policy →", "privacyLink": "Privacy Policy", "moxiAlt": "Moxi, the game's guide", "name": "Inkroach", "tagline": "One stroke of ink, and a shape takes hold.", "lede": "Inkroach is a territory duel painted in ink. Two players hold indigo and vermilion and take turns laying strokes on xuan paper. The ink bleeds outward, is carried along by water running across the paper, slowly dries — and where the two colours meet, it muddies into black that neither side can claim. In the end, whoever holds more ground with their ink wins.", "closing": "The ink isn't dry yet. Neither is the game.", "prose": ["Pick up the brush and fight for every inch of the paper!", "Six brushes at your command: press in with dense ink, splash wide to claim new ground, raise an outline to block the way — or wash your rival's territory away with clear water.", "Ride the currents, seize the Eyes, and before the ink dries, paint the whole sheet in your colour!"], "brushes": [["Dot", "the densest ink with the smallest reach — covers your opponent's ink before it dries"], ["Splash", "claims a large area in one go, but only once per game"], ["Texture", "dries the moment it lands; nothing can push it"], ["Outline", "leaves a wall that blocks both ink and water"], ["Wash", "the longest stroke — follow the water and it bleeds far"], ["Water", "takes no ground itself, but can thin ink that has already dried and even make it wet again"]], "features": [["Every sheet is different", "The grain of the paper, patches that are already wet, alum that refuses ink, and currents flowing across the sheet change every game. Three \"Eyes\" are hidden in the paper, worth a large bonus to whoever holds them. Read the paper, and you'll play it better."], ["Ways to play", "Pass and play · Online · Versus AI · Watch · Copybook · Free Brush"], ["Collection", "Wins and copybook practice unlock lobby backgrounds, avatars and illustrations. Save illustrations to your photos or share them with friends."], ["Eight languages", "English, 繁體中文, 简体中文, 日本語, 한국어, Deutsch, Français, Español."]]}, "ja": {"htmlLang": "ja", "label": "日本語", "nav": ["ゲーム", "ダウンロード", "スタジオ", "プライバシー"], "playSmall": "ダウンロード", "ios": "iOS版 鋭意開発中", "gameHead": "ゲーム紹介", "studioHead": "スタジオについて", "studioSub": "FireCat Studio", "studio": ["私たちはインディーゲームスタジオです。", "細部の一つひとつまで磨き上げ、プレイヤーに最高の体験を届けたい。", "さまざまな形で、まだ知らない文化や世界へご案内します。", "そして忙しい毎日の中に、ほっと一息つける場所を。"], "contact": "ご意見・不具合のご報告・お仕事のご相談は、こちらまで：", "privacyHead": "プライバシー", "privacySub": "概要 — 正式な内容はプライバシーポリシーをご覧ください", "privacyBtn": "プライバシーポリシー全文を読む →", "privacyLink": "プライバシーポリシー", "moxiAlt": "看板娘の墨汐", "name": "墨取り", "tagline": "一筆の墨に、一つの勢い。", "lede": "『墨取り』は水墨の陣取り対局です。二人がそれぞれ青と朱を持ち、画仙紙に交代で筆を置きます。墨はにじみ、紙の上を流れる水に運ばれ、ゆっくり乾き、二色が出会うところでは濁って黒くなり、どちらのものにもなりません。最後に、墨で広く地を取ったほうの勝ちです。", "closing": "墨はまだ乾いていない。勝負もまだ決まっていない。", "prose": ["筆を執り、画仙紙の一寸一寸を奪い合え！", "六つの筆を自在に使い分けよう。濃い墨で押さえ込み、溌墨で一気に陣地を広げ、鉤で壁を立てて行く手をふさぎ、清水で相手の陣地を洗い流す。", "水の流れを読み、勢眼を押さえ、墨が乾く前に紙一面を自分の色に染め上げろ！"], "brushes": [["点", "いちばん濃く、範囲は小さい。相手のまだ乾いていない墨を覆える"], ["溌", "一気に広い地を取る。ただし一局に一度だけ"], ["皴", "置いた瞬間に乾き、誰にも動かせない"], ["鉤", "墨と水の行く手をふさぐ壁を残す"], ["染", "いちばん長く引ける。水の道に乗れば遠くまでにじむ"], ["清水", "自分では地を取らないが、乾いた墨を洗って薄め、濡れた状態に戻せる"]], "features": [["毎局ちがう紙", "紙の目、はじめから湿っている場所、墨をはじく礬水、紙の上を流れる水。毎局ちがう紙が生まれます。紙には三つの「勢眼」が隠れていて、押さえたほうに大きな得点が入ります。紙を読めば、いい手が打てます。"], ["遊び方", "ふたりで対局 · オンライン対局 · AIと対局 · 観戦 · 臨書 · 試し書き"], ["コレクション", "勝利や臨書で、ロビーの背景、アイコン、イラストが解放されます。イラストは写真に保存したり、友だちに共有したりできます。"], ["八つの言語", "日本語、繁體中文、简体中文、English、한국어、Deutsch、Français、Español。"]]}, "ko": {"htmlLang": "ko", "label": "한국어", "nav": ["게임", "다운로드", "스튜디오", "개인정보"], "playSmall": "다운로드", "ios": "iOS 버전 개발 중", "gameHead": "게임 소개", "studioHead": "스튜디오 소개", "studioSub": "FireCat Studio", "studio": ["저희는 인디 게임 스튜디오입니다.", "작은 디테일 하나까지 다듬어, 플레이어에게 최고의 경험을 전하고 싶습니다.", "다양한 방식으로 새로운 문화와 세계로 안내하고,", "바쁜 일상 속에서 잠시 쉬어 갈 수 있는 한구석을 마련해 두고 싶습니다."], "contact": "제안, 버그 제보, 협업 문의는 언제든 메일로 보내 주세요: ", "privacyHead": "개인정보", "privacySub": "요약 — 전체 내용은 개인정보 처리방침을 따릅니다", "privacyBtn": "개인정보 처리방침 전문 보기 →", "privacyLink": "개인정보 처리방침", "moxiAlt": "안내 캐릭터 묵석", "name": "먹따먹기", "tagline": "먹 한 획에 형세가 선다.", "lede": "《먹따먹기》는 수묵으로 하는 땅따먹기 대국입니다. 두 사람이 청묵과 주묵을 나눠 들고 화선지 위에 번갈아 붓을 놓습니다. 먹은 번지고, 종이 위를 흐르는 물에 실려 가고, 천천히 마르며, 두 색이 만나는 곳에서는 탁한 검정으로 섞여 누구의 것도 되지 않습니다. 마지막에 먹으로 더 넓게 차지한 쪽이 이깁니다.", "closing": "먹이 아직 마르지 않았다. 승부도 아직이다.", "prose": ["붓을 들고, 화선지 위의 한 뼘 한 뼘을 차지하세요!", "여섯 가지 붓을 마음껏 활용하세요. 진한 먹으로 밀어붙이고, 발묵으로 단숨에 땅을 넓히고, 구륵으로 벽을 세워 길을 막고, 맑은 물로 상대의 땅을 씻어 내세요.", "물길을 읽고 요충을 차지해, 먹이 마르기 전에 종이 전체를 당신의 색으로 물들이세요!"], "brushes": [["점", "가장 진하고 범위는 작다. 상대의 아직 마르지 않은 먹을 덮는다"], ["발묵", "한 번에 넓은 땅을 차지한다. 단, 한 판에 한 번뿐"], ["준", "놓는 순간 말라 누구도 밀어낼 수 없다"], ["구륵", "먹과 물의 길을 막는 벽을 남긴다"], ["선염", "가장 길게 그을 수 있다. 물길을 타면 멀리까지 번진다"], ["맑은 물", "스스로 땅을 얻지는 않지만, 이미 마른 먹을 씻어 옅게 하고 다시 젖게 만든다"]], "features": [["판마다 다른 종이", "종이결, 처음부터 젖어 있는 자리, 먹을 받지 않는 백반수, 종이 위를 흐르는 물이 판마다 달라집니다. 종이에는 세 곳의 ‘요충’이 숨어 있어, 차지한 쪽이 큰 점수를 얻습니다. 종이를 읽어야 좋은 수가 나옵니다."], ["플레이 방법", "한 기기 2인 · 온라인 대국 · AI 대국 · 관전 · 임서 · 붓 연습"], ["컬렉션", "승리와 임서로 로비 배경, 아바타, 일러스트가 해금됩니다. 일러스트는 사진에 저장하거나 친구와 공유할 수 있습니다."], ["여덟 가지 언어", "한국어, English, 繁體中文, 简体中文, 日本語, Deutsch, Français, Español."]]}, "de": {"htmlLang": "de", "label": "Deutsch", "nav": ["Spiel", "Download", "Studio", "Datenschutz"], "playSmall": "Jetzt bei", "ios": "iOS-Version in Arbeit", "gameHead": "Über das Spiel", "studioHead": "Über das Studio", "studioSub": "FireCat Studio", "studio": ["Wir sind ein unabhängiges Spielestudio.", "Wir feilen an jedem Detail, um Spielerinnen und Spielern das bestmögliche Erlebnis zu bieten.", "Auf ganz unterschiedliche Weise möchten wir dich in andere Kulturen und Welten mitnehmen –", "und dir an vollen Tagen eine ruhige Ecke zum Durchatmen freihalten."], "contact": "Vorschläge, Fehlerberichte oder Kooperationsideen? Schreib uns: ", "privacyHead": "Datenschutz", "privacySub": "Zusammenfassung – maßgeblich ist die vollständige Datenschutzerklärung", "privacyBtn": "Vollständige Datenschutzerklärung lesen →", "privacyLink": "Datenschutzerklärung", "moxiAlt": "Moxi, die Begleiterin im Spiel", "name": "Tintenreich", "tagline": "Ein Strich Tusche, und eine Form nimmt Gestalt an.", "lede": "Tintenreich ist ein Gebietsduell in Tusche. Zwei Spieler führen Indigo und Zinnober und setzen abwechselnd Striche auf Xuan-Papier. Die Tusche verläuft, wird vom Wasser über das Papier getragen, trocknet langsam – und wo die zwei Farben sich treffen, mischt sie sich zu einem trüben Schwarz, das keiner bekommt. Am Ende gewinnt, wer mit seiner Tusche das größere Gebiet hält.", "closing": "Die Tusche ist noch nicht trocken. Die Partie auch nicht.", "prose": ["Greif zum Pinsel und kämpfe um jeden Zentimeter Papier!", "Sechs Pinsel stehen dir zur Wahl: Dränge mit dichter Tusche vor, erobere mit einem Spritzer weites Land, zieh eine Kontur als Mauer – oder wasch das Gebiet deines Gegners mit klarem Wasser fort.", "Lies die Strömungen, sichere dir die Augen und färbe das ganze Blatt in deiner Farbe, bevor die Tusche trocknet!"], "brushes": [["Tupfen", "die dichteste Tusche mit der kleinsten Reichweite – überdeckt gegnerische Tusche, solange sie nass ist"], ["Spritzer", "nimmt auf einen Schlag viel Fläche ein, aber nur einmal pro Partie"], ["Textur", "trocknet sofort und lässt sich von nichts mehr verschieben"], ["Kontur", "hinterlässt eine Mauer, die Tusche und Wasser aufhält"], ["Lavur", "der längste Strich – folgt er dem Wasser, verläuft er weit"], ["Wasser", "erobert selbst nichts, kann aber getrocknete Tusche verdünnen und wieder nass machen"]], "features": [["Jedes Blatt ist anders", "Papierfaser, bereits nasse Stellen, Alaun, das keine Tusche annimmt, und Strömungen im Papier ändern sich in jeder Partie. Drei „Augen“ sind im Papier versteckt; wer sie hält, bekommt einen großen Bonus. Wer das Papier liest, spielt besser."], ["Spielweisen", "Zu zweit an einem Gerät · Online · Gegen die KI · Zuschauen · Vorlagen · Freier Pinsel"], ["Sammlung", "Siege und Vorlagen schalten Lobby-Hintergründe, Avatare und Illustrationen frei. Illustrationen lassen sich in den Fotos speichern oder mit Freunden teilen."], ["Acht Sprachen", "Deutsch, English, 繁體中文, 简体中文, 日本語, 한국어, Français, Español."]]}, "fr": {"htmlLang": "fr", "label": "Français", "nav": ["Jeu", "Télécharger", "Studio", "Confidentialité"], "playSmall": "Disponible sur", "ios": "Version iOS en préparation", "gameHead": "Le jeu", "studioHead": "Le studio", "studioSub": "FireCat Studio", "studio": ["Nous sommes un studio de jeux indépendant.", "Nous peaufinons chaque détail pour offrir aux joueurs la meilleure expérience possible.", "De bien des façons, nous voulons vous faire découvrir d’autres cultures et d’autres mondes —", "et, au milieu de vos journées chargées, vous garder un coin tranquille pour souffler."], "contact": "Suggestions, bugs ou idées de collaboration ? Écrivez-nous : ", "privacyHead": "Confidentialité", "privacySub": "Résumé — seule la politique complète fait foi", "privacyBtn": "Lire la politique de confidentialité →", "privacyLink": "Politique de confidentialité", "moxiAlt": "Moxi, la guide du jeu", "name": "L'Encrage", "tagline": "Un trait d'encre, et une forme s'impose.", "lede": "L'Encrage est un duel de territoire peint à l'encre. Deux joueurs tiennent l'indigo et le vermillon et posent tour à tour des traits sur du papier xuan. L'encre diffuse, se laisse porter par l'eau qui court sur la feuille, sèche lentement — et là où les deux couleurs se rencontrent, elle se trouble en un noir que personne ne peut prendre. À la fin, celui qui tient le plus de terrain avec son encre l'emporte.", "closing": "L'encre n'est pas encore sèche. La partie non plus.", "prose": ["Prenez le pinceau et disputez chaque centimètre de papier !", "Six pinceaux à votre disposition : avancez à l'encre dense, conquérez de vastes terres d'une giclée, dressez un contour pour barrer la route — ou lavez le territoire adverse à l'eau claire.", "Lisez les courants, prenez les Yeux et, avant que l'encre ne sèche, teignez toute la feuille de votre couleur !"], "brushes": [["Point", "l'encre la plus dense, la plus petite portée — recouvre l'encre adverse encore humide"], ["Giclée", "prend une grande surface d'un coup, mais une seule fois par partie"], ["Texture", "sèche dès qu'elle touche le papier ; rien ne peut plus la déplacer"], ["Contour", "laisse un mur qui bloque l'encre et l'eau"], ["Lavis", "le trait le plus long — s'il suit l'eau, il diffuse loin"], ["Eau", "ne prend aucun terrain, mais peut diluer l'encre déjà sèche et la rendre humide à nouveau"]], "features": [["Chaque feuille est unique", "Le grain du papier, les zones déjà humides, l'alun qui refuse l'encre et les courants qui traversent la feuille changent à chaque partie. Trois « Yeux » sont cachés dans le papier et rapportent un gros bonus à qui les tient. Lisez le papier, et vous jouerez mieux."], ["Modes de jeu", "À deux sur un seul téléphone, chacun son tour · En ligne · Contre l'IA · Spectateur · Modèles · Pinceau libre"], ["Collection", "Les victoires et les modèles débloquent des fonds pour le salon, des avatars et des illustrations. Enregistrez les illustrations dans vos photos ou partagez-les avec vos amis."], ["Huit langues", "Français, English, 繁體中文, 简体中文, 日本語, 한국어, Deutsch, Español."]]}, "es": {"htmlLang": "es", "label": "Español", "nav": ["Juego", "Descargar", "Estudio", "Privacidad"], "playSmall": "Disponible en", "ios": "Versión para iOS en desarrollo", "gameHead": "El juego", "studioHead": "El estudio", "studioSub": "FireCat Studio", "studio": ["Somos un estudio de videojuegos independiente.", "Pulimos cada detalle para ofrecer a los jugadores la mejor experiencia posible.", "De muchas maneras distintas, queremos llevarte a conocer otras culturas y otros mundos,", "y, en tus días más ajetreados, guardarte un rincón tranquilo donde descansar."], "contact": "¿Sugerencias, errores o ideas de colaboración? Escríbenos: ", "privacyHead": "Privacidad", "privacySub": "Resumen: prevalece la política de privacidad completa", "privacyBtn": "Leer la política de privacidad completa →", "privacyLink": "Política de privacidad", "moxiAlt": "Moxi, la guía del juego", "name": "La Mancha", "tagline": "Un trazo de tinta, y una forma se afianza.", "lede": "La Mancha es un duelo de territorio pintado con tinta. Dos jugadores llevan el índigo y el bermellón y ponen trazos por turnos sobre papel xuan. La tinta se extiende, la arrastra el agua que corre por el papel, se seca poco a poco — y donde los dos colores se encuentran se enturbia en un negro que nadie puede tomar. Al final, gana quien cubra más terreno con su tinta.", "closing": "La tinta aún no se ha secado. La partida, tampoco.", "prose": ["¡Toma el pincel y lucha por cada centímetro del papel!", "Seis pinceles a tus órdenes: avanza con tinta densa, conquista grandes extensiones de una salpicadura, levanta un contorno para cerrar el paso… o lava el territorio rival con agua clara.", "Lee las corrientes, toma los Ojos y, antes de que la tinta se seque, ¡tiñe toda la hoja de tu color!"], "brushes": [["Punto", "la tinta más densa y de menor alcance; cubre la tinta rival que aún no se ha secado"], ["Salpicadura", "toma una gran superficie de una vez, pero solo una vez por partida"], ["Textura", "se seca al instante y ya nada puede moverla"], ["Contorno", "deja un muro que frena la tinta y el agua"], ["Aguada", "el trazo más largo; si sigue el agua, llega muy lejos"], ["Agua", "no toma terreno, pero puede diluir la tinta ya seca y volver a humedecerla"]], "features": [["Cada hoja es distinta", "La fibra del papel, las zonas que ya están húmedas, el alumbre que rechaza la tinta y las corrientes que recorren la hoja cambian en cada partida. En el papel se esconden tres «Ojos» que dan una gran bonificación a quien los domine. Lee el papel y jugarás mejor."], ["Modos de juego", "Dos jugadores en un solo teléfono, por turnos · En línea · Contra la IA · Espectador · Caligrafía · Pincel libre"], ["Colección", "Las victorias y la caligrafía desbloquean fondos para el vestíbulo, avatares e ilustraciones. Guarda las ilustraciones en tus fotos o compártelas con tus amigos."], ["Ocho idiomas", "Español, English, 繁體中文, 简体中文, 日本語, 한국어, Deutsch, Français."]]}};
+  var CODES = ["tw","cn","en","ja","ko","de","fr","es"];
+  var FONT = { cn: "Noto+Serif+SC", ja: "Noto+Serif+JP", ko: "Noto+Serif+KR", en: "Noto+Serif", de: "Noto+Serif", fr: "Noto+Serif", es: "Noto+Serif" };
+  var alias = { tw:"tw", "zh-tw":"tw", "zh-hant":"tw", "zh-hk":"tw", "zh-mo":"tw", zh:"tw",
+                cn:"cn", "zh-cn":"cn", "zh-hans":"cn", "zh-sg":"cn", "zh-my":"cn",
+                en:"en", ja:"ja", ko:"ko", de:"de", fr:"fr", es:"es" };
+
+  function norm(tag) {
+    if (!tag) return null;
+    var t = String(tag).toLowerCase();
+    if (alias[t]) return alias[t];
+    if (/^zh-(hant|tw|hk|mo)/.test(t)) return "tw";
+    if (/^zh-(hans|cn|sg|my)/.test(t)) return "cn";
+    return alias[t.split("-")[0]] || null;
+  }
+  function pick() {
+    var q = null;
+    try { q = norm(new URLSearchParams(location.search).get("lang")); } catch (e) {}
+    if (q) return q;
+    try { var saved = norm(localStorage.getItem("site.lang")); if (saved) return saved; } catch (e) {}
+    var list = (navigator.languages && navigator.languages.length) ? navigator.languages : [navigator.language];
+    for (var i = 0; i < list.length; i++) { var c = norm(list[i]); if (c) return c; }
+    return "en";
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]; }); }
+  function $(id) { return document.getElementById("t-" + id); }
+  function cards(list) { return list.map(function (kv) { return '<div class="card"><h3>' + esc(kv[0]) + '</h3><p>' + esc(kv[1]) + '</p></div>'; }).join(""); }
+  var loaded = {};
+  function font(code) {
+    var f = FONT[code]; if (!f || loaded[f]) return; loaded[f] = 1;
+    var l = document.createElement("link"); l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=" + f + ":wght@400;600;900&display=swap";
+    document.head.appendChild(l);
+  }
+
+  function render(code) {
+    var d = I18N[code];
+    document.documentElement.lang = d.htmlLang;
+    document.title = "FireCat Studio｜" + d.name;
+    font(code);
+    var pv = "https://carterchou.github.io/inkgame/?lang=" + code;
+    var hrefs = ["#game", "#download", "#studio", pv];
+    $("nav").innerHTML = d.nav.map(function (t, i) { return '<li' + (i === 1 ? ' class="opt"' : '') + '><a href="' + hrefs[i] + '">' + esc(t) + '</a></li>'; }).join("");
+    $("title").innerHTML = '<img class="title" src="assets/title-' + code + '.png" alt="' + esc(d.name) + '">';
+    ["tagline", "lede", "playSmall", "ios", "gameHead", "closing", "studioHead", "studioSub", "contact", "privacyLink"]
+      .forEach(function (k) { $(k).textContent = d[k]; });
+    $("moxi").alt = d.moxiAlt;
+    $("prose").innerHTML = d.prose.map(function (p) { return "<p>" + esc(p) + "</p>"; }).join("");
+    $("brushes").innerHTML = cards(d.brushes);
+    $("features").innerHTML = cards(d.features);
+    $("studio").innerHTML = d.studio.map(esc).join("<br>\n");
+    $("privacyLink").href = pv;
+    document.getElementById("lang").value = code;
+  }
+
+  var sel = document.getElementById("lang");
+  sel.addEventListener("change", function () {
+    var c = sel.value;
+    try { localStorage.setItem("site.lang", c); } catch (e) {}
+    try { var u = new URL(location.href); u.searchParams.set("lang", c); history.replaceState(null, "", u); } catch (e) {}
+    render(c);
+  });
+  var start = pick();
+  if (start !== "tw") render(start);
+})();
+</script>
+</body>
+</html>
